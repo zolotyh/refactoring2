@@ -1,0 +1,177 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>Рефакторинг</title>
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/wrike.css">
+    <link rel="stylesheet" href="style.css" media="all">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+    <style>
+			body .reveal {
+				font-size: 8.5vh;
+			}
+			.reveal pre > code {
+				font-size: 4vh;
+				line-height: 1.5;
+				max-height: 800px;
+			}
+      .reveal .solid {
+        width: 2ex;
+        display:inline-block;
+        text-align:center;
+        font-weight: 400;
+      }
+      .reveal li {
+        margin-bottom: .5em;
+      }
+      .reveal pre.opacity * {
+        color: rgba(255,255,255, 0.3) !important;
+      }
+      .reveal .tag {
+        width: 12ex;
+        display:inline-block;
+        float: left;
+        font-weight:500;
+      }
+
+      .reveal pre.opacity mark,
+      .reveal pre.opacity mark * {
+        color: rgba(255,255,255, 1) !important;
+        background-color:transparent;
+      }
+
+      .reveal ul.solid-ul li {
+        list-style:none;
+      }
+
+      .hidden {
+        visibility:hidden;
+      }
+
+      .reveal .framework-logos {
+        display: flex;
+        flex-wrap: nowrap;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .reveal .framework-logos > div {
+        width: 20%;
+      }
+      .reveal .framework-logos > div > img{
+        max-width: 100%;
+        display: inline-block;
+        vertical-align: middle;
+      }
+
+			.reveal .red {
+				color: #B82828 !important;
+			}
+
+    </style>
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<section>
+					<p>Рефакторинг</p>
+					<small>Алексей Золотых, Wrike</small>
+				</section>
+				<section>
+					<img src="img/screen1.png" alt="">
+				</section>
+				<section>
+					<img src="img/codelines.png" alt="">
+				</section>
+				<section>
+					<p>Clock</p>
+					<pre><code data-trim>
+					#!/bin/sh
+					npm install -g cloc;
+					clock master
+					</code></pre>
+					<p>
+						<a href="https://github.com/AlDanial/cloc">https://goo.gl/PGu4Tb</a>
+					</p>
+				</section>
+				<section>
+					<p>
+					Рефа́кторинг &mdash;
+					<small>
+					процесс изменения внутренней структуры программы, не затрагивающий её внешнего поведения и имеющий целью облегчить понимание её работы
+					</small>
+					</p>
+				</section>
+				<section>
+					<ul>
+						<li>Изменение сигнатуры метода (Change Method Signature)</li>
+						<li>Инкапсуляция поля (Encapsulate Field)</li>
+						<li>Выделение класса (Extract Class)</li>
+						<li>Выделение интерфейса (Extract Interface)</li>
+						<li>Выделение локальной переменной (Extract Local Variable)</li>
+						<li>Выделение метода (Extract Method)</li>
+						<li>Генерализация типа (Generalize Type)</li>
+						<li>Встраивание (Inline)</li>
+						<li>Введение фабрики (Introduce Factory)</li>
+						<li>Введение параметра (Introduce Parameter)</li>
+						<li>Подъём метода (Pull Up Method)</li>
+						<li>Спуск метода (Push Down Method)</li>
+						<li>Переименование метода (Rename Method)</li>
+						<li>Перемещение метода (Move Method)</li>
+						<li>Замена условного оператора полиморфизмом (Replace Conditional with Polymorphism)</li>
+						<li>Замена наследования делегированием (Replace Inheritance with Delegation)</li>
+						<li>Замена кода типа подклассами (Replace Type Code with Subclasses)</li>
+					</ul>
+				</section>
+				<section data-transition="slide none">
+					<p>Все это не подходит для фронтенда</p>
+					<img src="img/1.jpg" alt="">
+				</section>
+				<section data-transition="none slide">
+					<p>Все это не <s>очень</s> подходит для фронтенда</p>
+					<img src="img/1.jpg" alt="">
+				</section>
+				<section>
+					<p>В браузере много контекстов</p>
+				</section>
+			</div>
+    </div>
+    <script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+			Reveal.initialize({
+        controls: false,
+        height: 1080,
+        history: true,
+        margin: 0.1,
+        maxScale: 2,
+        minScale: 0.7,
+        progress: true,
+        slideNumber: true,
+        width: 1920,
+				dependencies: [
+					{ src: 'plugin/markdown/marked.js' },
+					{ src: 'plugin/markdown/markdown.js' },
+					{ src: 'plugin/notes/notes.js', async: true },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+				]
+			});
+		</script>
+	</body>
+</html>
