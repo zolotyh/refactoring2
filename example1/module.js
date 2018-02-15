@@ -1,3 +1,3 @@
 document.addEventListener('click', function(){
-    buttonList.mainButton.classList.toggle('active2');
+    button.classList.toggle('active2');
 });

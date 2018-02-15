@@ -1,9 +1,7 @@
-var buttonList = {
-    mainButton: document.querySelector('.button')
-};
+var button = document.querySelector('.button');
 
 
 
-buttonList.mainButton.addEventListener('click', function (e) {
+button.addEventListener('click', function (e) {
     e.currentTarget.classList.toggle('active');
 });
