@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<!-- saved from url=(0026)http://localhost:3000/#/45 -->
+<html class="js no-mobile desktop no-ie chrome chrome66 root-section gradient rgba opacity textshadow multiplebgs boxshadow borderimage borderradius cssreflections csstransforms csstransitions no-touch retina fontface domloaded gr__localhost w-1436 gt-240 gt-320 gt-480 gt-640 gt-768 gt-800 gt-1024 gt-1280 lt-1440 lt-1680 lt-1920 no-portrait landscape" id="index-page"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>Рефакторинг</title>
+
+		<link rel="stylesheet" href="./qwe1_files/reveal.css">
+		<link rel="stylesheet" href="./qwe1_files/wrike.css">
+    	<link rel="stylesheet" href="./qwe1_files/style.css" media="all">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="./qwe1_files/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script><link rel="stylesheet" type="text/css" href="./qwe1_files/paper.css">
+    <style>
+			body .reveal {
+				font-size: 8.5vh;
+			}
+			.reveal pre > code {
+				font-size: 4vh;
+				line-height: 1.5;
+				max-height: 800px;
+			}
+      .reveal .solid {
+        width: 2ex;
+        display:inline-block;
+        text-align:center;
+        font-weight: 400;
+      }
+      .reveal li {
+        margin-bottom: .5em;
+      }
+      .reveal pre.opacity * {
+        color: rgba(255,255,255, 0.3) !important;
+      }
+      .reveal .tag {
+        width: 12ex;
+        display:inline-block;
+        float: left;
+        font-weight:500;
+      }
+
+      .reveal pre.opacity mark,
+      .reveal pre.opacity mark * {
+        color: rgba(255,255,255, 1) !important;
+        background-color:transparent;
+      }
+
+      .reveal ul.solid-ul li {
+        list-style:none;
+      }
+
+      .hidden {
+        visibility:hidden;
+      }
+
+      .reveal .framework-logos {
+        display: flex;
+        flex-wrap: nowrap;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .reveal .framework-logos > div {
+        width: 20%;
+      }
+      .reveal .framework-logos > div > img{
+        max-width: 100%;
+        display: inline-block;
+        vertical-align: middle;
+      }
+
+			.reveal .red {
+				color: #B82828 !important;
+			}
+
+    </style><script type="text/javascript" src="./qwe1_files/marked.js"></script><script type="text/javascript" src="./qwe1_files/markdown.js"></script><script type="text/javascript" src="./qwe1_files/notes.js"></script><script type="text/javascript" src="./qwe1_files/highlight.js"></script>
+	</head>
+	<body data-gr-c-s-loaded="true">
+		<div class="reveal slide center has-horizontal-slides ready" role="application" data-transition-speed="default" data-background-transition="fade">
+			<div class="slides" style="width: 1920px; height: 1080px; left: 50%; top: 50%; bottom: auto; right: auto; transform: translate(-50%, -50%) scale(0.7);">
+				<section hidden="" aria-hidden="true" class="past" style="top: 540px; display: none;">
+					<p>Рефакторинг</p>
+					<small>Алексей Золотых, Wrike</small>
+				</section>
+				<section hidden="" aria-hidden="true" class="past" style="top: 540px; display: none;">
+					<img src="./qwe1_files/screen1.png" alt="">
+				</section>
+				<section hidden="" aria-hidden="true" class="past" style="top: 540px; display: none;">
+					<img src="./qwe1_files/codelines.png" alt="">
+				</section>
+				<section hidden="" aria-hidden="true" class="past" style="top: 540px; display: none;">
+					<p>Clock</p>
+					<pre><code data-trim="" class="hljs bash"><span class="hljs-meta">#!/bin/sh</span>
+npm install -g cloc;
+clock master</code></pre>
+					<p>
+						<a href="https://github.com/AlDanial/cloc">https://goo.gl/PGu4Tb</a>
+					</p>
+				</section>
+				<section hidden="" aria-hidden="true" class="past" style="top: 540px; display: none;">
+					<p>
+					Рефа́кторинг —
+					<small>
+					процесс изменения внутренней структуры программы, не затрагивающий её внешнего поведения и имеющий целью облегчить понимание её работы
+					</small>
+					</p>
+				</section>
+				<section hidden="" aria-hidden="true" class="past" style="top: 540px; display: none;">
+					<p>
+						Зачем рефакторить!?
+					</p>
+				</section>
+				<section hidden="" aria-hidden="true" class="past" style="top: 540px; display: none;">
+					<p>Когда нельзя рефакторить</p>
+				</section>
+				<section hidden="" aria-hidden="true" class="past" style="top: 540px; display: none;">
+					<p>Необходимость рефакторинга куска кода как функция от частоты изменения</p>
+					<a href="https://goo.gl/56pRGe">https://goo.gl/56pRGe</a>
+				</section>
+				<section hidden="" aria-hidden="true" class="past" style="top: 540px; display: none;">
+					<ol>
+						<li>Изменение сигнатуры метода (Change Method Signature)</li>
+						<li>Инкапсуляция поля (Encapsulate Field)</li>
+						<li>Выделение класса (Extract Class)</li>
+						<li>Выделение интерфейса (Extract Interface)</li>
+						<li>Выделение локальной переменной (Extract Local Variable)</li>
+						<li>Выделение метода (Extract Method)</li>
+						<li>Генерализация типа (Generalize Type)</li>
+						<li>Встраивание (Inline)</li>
+						<li>Введение фабрики (Introduce Factory)</li>
+						<li>Введение параметра (Introduce Parameter)</li>
+						<li>Подъём метода (Pull Up Method)</li>
+						<li>Спуск метода (Push Down Method)</li>
+						<li>Переименование метода (Rename Method)</li>
+						<li>Перемещение метода (Move Method)</li>
+						<li>Замена условного оператора полиморфизмом (Replace Conditional with Polymorphism)</li>
+						<li>Замена наследования делегированием (Replace Inheritance with Delegation)</li>
+						<li>Замена кода типа подклассами (Replace Type Code with Subclasses)</li>
+					</ol>
+				</section>
+				<section data-transition="slide none" hidden="" aria-hidden="true" class="past" style="top: 540px; display: none;">
+					<p>Все это не подходит для фронтенда</p>
+					<img src="./qwe1_files/1.jpg" alt="">
+				</section>
+				<section data-transition="none slide" hidden="" aria-hidden="true" class="past" style="top: 540px; display: none;">
+					<p>Все это не <s>очень</s> подходит для фронтенда</p>
+					<img src="./qwe1_files/1.jpg" alt="">
+				</section>
+				<section data-transition="none slide" hidden="" aria-hidden="true" class="past" style="top: 540px; display: none;">
+					<p>Все это не <s>всегда</s> подходит для фронтенда</p>
+					<img src="./qwe1_files/1.jpg" alt="">
+				</section>
+				<section hidden="" aria-hidden="true" class="past" style="top: 540px; display: none;">
+					<p>В браузере много контекстов</p>
+				</section>
+				<section hidden="" aria-hidden="true" class="past" style="top: 540px; display: none;">
+					<h2>Контексты</h2>
+					<ol>
+						<li>HTML</li>
+						<li>CSS</li>
+						<li>JS</li>
+						<li class="fragment visible" data-fragment-index="0">Сборщик</li>
+						<li class="fragment visible" data-fragment-index="1">LESS</li>
+						<li class="fragment visible" data-fragment-index="2">TypeScript</li>
+					</ol>
+				</section>
+				<section hidden="" aria-hidden="true" class="past" style="top: 540px; display: none;">
+					<p>Делайте изменения маленькими</p>
+				</section>
+				<section hidden="" aria-hidden="true" class="past" style="top: 540px; display: none;">
+					<p>К рефакторингу хорошо бы подготовиться</p>
+					<ul>
+						<li class="fragment visible" data-fragment-index="0">Пофиксить все проблемы линтера</li>
+						<li class="fragment visible" data-fragment-index="1">Автоматически форматировать код</li>
+						<li class="fragment visible" data-fragment-index="2">Написать тесты</li>
+					</ul>
+				</section>
+				<section hidden="" aria-hidden="true" class="past" style="top: 540px; display: none;">
+					<p>Зачем линтер?!</p>
+					<p class="fragment visible" data-fragment-index="0">— код единообразней</p>
+				</section>
+				<section hidden="" aria-hidden="true" class="past" style="top: 540px; display: none;">
+					<p>Зачем тесты?</p>
+					<p class="fragment visible" data-fragment-index="0">Правильные тесты повышают надежность</p>
+				</section>
+				<section hidden="" aria-hidden="true" class="past" style="top: 540px; display: none;">
+					<img src="./qwe1_files/mock.png" alt="">
+				</section>
+				<section hidden="" aria-hidden="true" class="past" style="top: 540px; display: none;">
+					<p>
+						Код компонента
+					</p>
+					<pre><code style="font-size: 20px" data-trim="" class="hljs scala"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">FilterForm</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">React</span>.<span class="hljs-title">Component</span> </span>{
+  constructor(props) {
+    <span class="hljs-keyword">super</span>(props);
+    <span class="hljs-keyword">this</span>.state = {
+      value: '',
+      frameworks: [<span class="hljs-symbol">'reac</span>t', <span class="hljs-symbol">'angula</span>r', <span class="hljs-symbol">'embe</span>r', <span class="hljs-symbol">'backbon</span>e']
+    };
+    
+    <span class="hljs-keyword">this</span>.handleChange = <span class="hljs-keyword">this</span>.handleChange.bind(<span class="hljs-keyword">this</span>);
+  }
+
+  handleChange(event) {
+    <span class="hljs-keyword">this</span>.setState({value: event.target.value});
+  }
+  
+
+  render() {
+    const filteredElements = <span class="hljs-keyword">this</span>.state.frameworks
+      .filter(e =&gt; e.includes(<span class="hljs-keyword">this</span>.state.value))
+      .map(e =&gt; &lt;li&gt;{ e }&lt;/li&gt;)
+           
+    <span class="hljs-keyword">return</span> (
+      &lt;div&gt;
+          &lt;input <span class="hljs-class"><span class="hljs-keyword">type</span></span>=<span class="hljs-string">"text"</span> value=<span class="hljs-string">"{this.state.value}"</span> onchange=<span class="hljs-string">"{this.handleChange}"</span>&gt;
+          &lt;ul&gt;{ filteredElements }&lt;/ul&gt;
+      &lt;/div&gt;
+    );
+  }
+}	</code></pre>
+				</section>
+				<section data-transition="none slide" hidden="" aria-hidden="true" class="past" style="top: 540px; display: none;">
+					<pre><code data-trim="" data-no-escape="" class="hljs lisp">test('should work', () =&gt; {
+	const wrapper = shallow(<span class="hljs-name">&lt;FilterForm</span> /&gt;)<span class="hljs-comment">;</span>
+	
+	expect(<span class="hljs-name">wrapper</span>.find('li').length).to.equal(<span class="hljs-number">4</span>)<span class="hljs-comment">;</span>
+	
+	wrapper.find('input').simulate('change', {target: {value: 'react'}})<span class="hljs-comment">;</span>
+	
+	expect(<span class="hljs-name">wrapper</span>.find('li').length).to.equal(<span class="hljs-number">1</span>)<span class="hljs-comment">;</span>
+})<span class="hljs-comment">;	</span></code></pre>
+				</section>
+
+				<section hidden="" aria-hidden="true" class="past" style="top: 540px; display: none;">
+					<pre><code data-trim="" class="hljs pf">const filteredElements = this.<span class="hljs-keyword">state</span>.frameworks
+      .filter(e =&gt; e.includes(this.<span class="hljs-keyword">state</span>.value))
+      .map(e =&gt; <span class="hljs-variable">&lt;li&gt;</span>{ e }<span class="hljs-variable">&lt;/li&gt;</span>)</code></pre>
+				</section>
+				<section data-transition="slide none" hidden="" aria-hidden="true" class="past" style="top: 540px; display: none;">
+					<pre><code data-trim="" data-noescape="" class="hljs pf">const filteredElements = this.<span class="hljs-keyword">state</span>.frameworks
+      <mark>.filter(e =&gt; e.includes(this.<span class="hljs-keyword">state</span>.value))</mark>
+      .map(e =&gt; <span class="hljs-variable">&lt;li&gt;</span>{ e }<span class="hljs-variable">&lt;/li&gt;</span>)</code></pre>
+				</section>
+				<section data-transition="none slide" hidden="" aria-hidden="true" class="past" style="top: 540px; display: none;">
+					<pre><code data-trim="" data-no-escape="" class="hljs lisp">test('should work', () =&gt; {
+	const wrapper = shallow(<span class="hljs-name">&lt;FilterForm</span> /&gt;)<span class="hljs-comment">;</span>
+	
+	expect(<span class="hljs-name">wrapper</span>.find('li').length).to.equal(<span class="hljs-number">4</span>)<span class="hljs-comment">;</span>
+	
+	wrapper.find('input').simulate('change', {target: {value: 'react'}})<span class="hljs-comment">;</span>
+	
+	expect(<span class="hljs-name">wrapper</span>.find('li').length).to.equal(<span class="hljs-number">1</span>)<span class="hljs-comment">;</span>
+})<span class="hljs-comment">;	</span></code></pre>
+				</section>
+				<section data-transition="none" hidden="" aria-hidden="true" class="past" style="top: 540px; display: none;">
+					<pre><code data-trim="" data-noescape="" class="hljs lisp">test('should work', () =&gt; {
+	const wrapper = shallow(<span class="hljs-name">&lt;FilterForm</span> /&gt;)<span class="hljs-comment">;</span>
+	
+	expect(<span class="hljs-name">wrapper</span>.<mark>find('li')</mark>.length).to.equal(<span class="hljs-number">4</span>)<span class="hljs-comment">;</span>
+	
+	wrapper.<mark>find('input').simulate('change'</mark>, {target: {value: 'react'}})<span class="hljs-comment">;</span>
+	
+	expect(<span class="hljs-name">wrapper</span>.<mark>find('li').length</mark>).to.equal(<span class="hljs-number">1</span>)<span class="hljs-comment">;</span>
+})<span class="hljs-comment">;	</span></code></pre>
+				</section>
+				<section hidden="" aria-hidden="true" class="past" style="top: 540px; display: none;">
+					<p>
+					Правило туриста
+					</p>
+					<p class="fragment visible" data-fragment-index="0">— полянку нужно оставить чище, чем она была</p>
+					<p class="fragment visible" data-fragment-index="1">— иногда нужно внедрять принудительно</p>
+				</section>
+					<section hidden="" aria-hidden="true" class="past" style="top: 540px; display: none;">
+						<h2>Наша ситуация</h2>
+					</section>
+					<section data-transition="none" hidden="" aria-hidden="true" class="past" style="top: 540px; display: none;">
+						<img src="./qwe1_files/1.png" alt="">
+					</section>
+					<section data-transition="none" hidden="" aria-hidden="true" class="past" style="top: 540px; display: none;">
+						<img src="./qwe1_files/1_1.png" alt="">
+					</section>
+					<section data-transition="none" hidden="" aria-hidden="true" class="past" style="top: 540px; display: none;">
+						<img src="./qwe1_files/1_2.png" alt="">
+					</section>
+					<section data-transition="none" hidden="" aria-hidden="true" class="past" style="top: 540px; display: none;">
+						<img src="./qwe1_files/1_3.png" alt="">
+					</section>
+					<section data-transition="none" hidden="" aria-hidden="true" class="past" style="top: 540px; display: none;">
+						<img src="./qwe1_files/1_4.png" alt="">
+					</section>
+					<section data-transition="none" hidden="" aria-hidden="true" class="past" style="top: 540px; display: none;">
+						<img src="./qwe1_files/1_5.png" alt="">
+					</section>
+					<section data-transition="none" hidden="" aria-hidden="true" class="past" style="top: 540px; display: none;">
+						<img src="./qwe1_files/2.png" alt="">
+					</section>
+					<section data-transition="none" hidden="" aria-hidden="true" class="past" style="top: 540px; display: none;">
+						<img src="./qwe1_files/3.png" alt="">
+					</section>
+					<section data-transition="none" hidden="" aria-hidden="true" class="past" style="top: 540px; display: none;">
+						<img src="./qwe1_files/2_1.png" alt="">
+					</section>
+					<section data-transition="none" hidden="" aria-hidden="true" class="past" style="top: 540px; display: none;">
+						<img src="./qwe1_files/4.png" alt="">
+					</section>
+					<section data-transition="none" hidden="" aria-hidden="true" class="past" style="top: 540px; display: none;">
+						<img src="./qwe1_files/4_1.png" alt="">
+					</section>
+					<section hidden="" aria-hidden="true" class="past" style="top: 540px; display: none;">
+						<img src="./qwe1_files/6_1.png" alt="">
+					</section>
+					<section data-background-image="img/new/7.png" hidden="" aria-hidden="true" class="past" style="top: 540px; display: none;"></section>
+					<section data-background-image="img/new/7_2.png" hidden="" aria-hidden="true" class="past" style="top: 540px; display: none;"></section>
+					<section data-transition="none" hidden="" aria-hidden="true" class="past" style="top: 30px; display: none;">
+						<img src="./qwe1_files/8_2.png" alt="">
+					</section>
+					<section data-transition="none" hidden="" aria-hidden="true" class="past" style="top: 30px; display: none;">
+						<img src="./qwe1_files/8_3.png" alt="">
+					</section>
+					<section data-transition="none" class="past" style="top: 30.5px; display: block;" hidden="" aria-hidden="true">
+						<img src="./qwe1_files/8_4.png" alt="">
+					</section>
+					<section data-transition="none" data-background-image="img/new/9.png" class="past" style="top: 520px; display: block;" hidden="" aria-hidden="true"></section>
+					<section data-transition="none" data-background-image="img/new/10.png" class="present" style="top: 520px; display: block;"></section>
+					<section data-transition="none" data-background-image="img/new/50.png" class="future" style="top: 520px; display: block;" hidden="" aria-hidden="true"></section>
+					<section data-transition="none" data-background-image="img/new/51.png" class="future" style="top: 520px; display: block;" hidden="" aria-hidden="true"></section>
+										<section hidden="" aria-hidden="true" class="future" style="top: 273px; display: none;">
+						<p>Недостатки</p>
+						<ul>
+							<li class="fragment" data-fragment-index="0">Глобальная область видимости</li>
+							<li class="fragment" data-fragment-index="1">Долгая сборка и пересборка</li>
+							<li class="fragment" data-fragment-index="2">Легаси в коде</li>
+						</ul>
+					</section>
+
+					<section hidden="" aria-hidden="true" class="future" style="top: 155px; display: none;">
+            			<img src="./qwe1_files/shelltrick.png" alt="">
+					</section>
+
+			</div>
+    <div class="backgrounds"><div class="slide-background past" style="display: none;"></div><div class="slide-background past" style="display: none;"></div><div class="slide-background past" style="display: none;"></div><div class="slide-background past" style="display: none;"></div><div class="slide-background past" style="display: none;"></div><div class="slide-background past" style="display: none;"></div><div class="slide-background past" style="display: none;"></div><div class="slide-background past" style="display: none;"></div><div class="slide-background past" style="display: none;"></div><div class="slide-background past" style="display: none;"></div><div class="slide-background past" style="display: none;"></div><div class="slide-background past" style="display: none;"></div><div class="slide-background past" style="display: none;"></div><div class="slide-background past" style="display: none;"></div><div class="slide-background past" style="display: none;"></div><div class="slide-background past" style="display: none;"></div><div class="slide-background past" style="display: none;"></div><div class="slide-background past" style="display: none;"></div><div class="slide-background past" style="display: none;"></div><div class="slide-background past" style="display: none;"></div><div class="slide-background past" style="display: none;"></div><div class="slide-background past" style="display: none;"></div><div class="slide-background past" style="display: none;"></div><div class="slide-background past" style="display: none;"></div><div class="slide-background past" style="display: none;"></div><div class="slide-background past" style="display: none;"></div><div class="slide-background past" style="display: none;"></div><div class="slide-background past" style="display: none;"></div><div class="slide-background past" style="display: none;"></div><div class="slide-background past" style="display: none;"></div><div class="slide-background past" style="display: none;"></div><div class="slide-background past" style="display: none;"></div><div class="slide-background past" style="display: none;"></div><div class="slide-background past" style="display: none;"></div><div class="slide-background past" style="display: none;"></div><div class="slide-background past" style="display: none;"></div><div class="slide-background past" style="display: none;"></div><div class="slide-background past" style="display: none;"></div><div class="slide-background past" style="display: none;"></div><div class="slide-background past" data-background-hash="0img/new/7.pngnullnullnullnullnullnull" style="display: none;"></div><div class="slide-background past" data-background-hash="0img/new/7_2.pngnullnullnullnullnullnull" style="display: none;"></div><div class="slide-background past" style="display: none;" data-loaded="true"></div><div class="slide-background past" style="display: none;" data-loaded="true"></div><div class="slide-background past" data-loaded="true" style="display: block;"></div><div class="slide-background past" data-background-hash="0img/new/9.pngnullnullnullnullnullnull" data-loaded="true" style="display: block; background-image: url(&quot;img/new/9.png&quot;);"></div><div class="slide-background present" data-background-hash="0img/new/10.pngnullnullnullnullnullnull" data-loaded="true" style="display: block; background-image: url(&quot;img/new/10.png&quot;);"></div><div class="slide-background future" data-background-hash="0img/new/50.pngnullnullnullnullnullnull" data-loaded="true" style="display: block; background-image: url(&quot;img/new/50.png&quot;);"></div><div class="slide-background future" data-background-hash="0img/new/51.pngnullnullnullnullnullnull" data-loaded="true" style="display: block; background-image: url(&quot;img/new/51.png&quot;);"></div><div class="slide-background future" style="display: none;" data-loaded="true"></div><div class="slide-background future" style="display: none;" data-loaded="true"></div></div><div class="progress" style="display: block;"><span style="width: 1318.78px;"></span></div><aside class="controls" data-controls-layout="bottom-right" data-controls-back-arrows="faded" style="display: none;"><button class="navigate-left enabled" aria-label="previous slide"><div class="controls-arrow"></div></button><button class="navigate-right enabled" aria-label="next slide"><div class="controls-arrow"></div></button><button class="navigate-up" aria-label="above slide" disabled="disabled"><div class="controls-arrow"></div></button><button class="navigate-down" aria-label="below slide" disabled="disabled"><div class="controls-arrow"></div></button></aside><div class="slide-number" style="display: block;"><span class="slide-number-a">46</span></div><div class="speaker-notes" data-prevent-swipe="" tabindex="0"></div><div class="pause-overlay"></div><div id="aria-status-div" aria-live="polite" aria-atomic="true" style="position: absolute; height: 1px; width: 1px; overflow: hidden; clip: rect(1px, 1px, 1px, 1px);"></div></div>
+    <script src="./qwe1_files/head.min.js"></script>
+		<script src="./qwe1_files/reveal.js"></script>
+
+		<script>
+			Reveal.initialize({
+        controls: false,
+        height: 1080,
+        history: true,
+        margin: 0.1,
+        maxScale: 2,
+        minScale: 0.7,
+        progress: true,
+        slideNumber: true,
+        width: 1920,
+				dependencies: [
+					{ src: 'plugin/markdown/marked.js' },
+					{ src: 'plugin/markdown/markdown.js' },
+					{ src: 'plugin/notes/notes.js', async: true },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+				]
+			});
+		</script>
+	
+
+</body></html>

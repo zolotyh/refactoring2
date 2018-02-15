@@ -8,7 +8,7 @@
 
 		<link rel="stylesheet" href="css/reveal.css">
 		<link rel="stylesheet" href="css/theme/wrike.css">
-    <link rel="stylesheet" href="style.css" media="all">
+    	<link rel="stylesheet" href="style.css" media="all">
 
 		<!-- Theme used for syntax highlighting of code -->
 		<link rel="stylesheet" href="lib/css/zenburn.css">
@@ -21,6 +21,7 @@
 			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
 			document.getElementsByTagName( 'head' )[0].appendChild( link );
 		</script>
+
     <style>
 			body .reveal {
 				font-size: 8.5vh;
@@ -80,8 +81,50 @@
       }
 
 			.reveal .red {
-				color: #B82828 !important;
 			}
+			.reveal mark.green *, mark.green {
+				background:#73BD00!important;
+				color: #fff!important;
+			}
+			.reveal mark.red *, mark.red {
+				background:#D0011B!important;
+				color: #fff!important;
+			}
+			 .reveal .styles-1 {
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: row;
+    -ms-flex-direction: row;
+    flex-direction: row;
+    -webkit-flex-wrap: nowrap;
+    -ms-flex-wrap: nowrap;
+    flex-wrap: nowrap;
+    -webkit-justify-content: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-align-content: stretch;
+    -ms-flex-line-pack: stretch;
+    align-content: stretch;
+    -webkit-align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
+      }
+           .reveal .styles-1 li {
+           	vertical-align: middle;
+           }
+
+     .reveal .styles-1 > * {
+        -webkit-order: 0;
+    -ms-flex-order: 0;
+    order: 0;
+    -webkit-flex: 0 1 auto;
+    -ms-flex: 0 1 auto;
+    flex: 0 1 auto;
+    -webkit-align-self: auto;
+    -ms-flex-item-align: auto;
+    align-self: auto;
+      }
+
 
     </style>
 	</head>
@@ -94,6 +137,9 @@
 				</section>
 				<section>
 					<img src="img/screen1.png" alt="">
+				</section>
+				<section>
+					<img src="img/maxresdefault.jpg" alt="">
 				</section>
 				<section>
 					<img src="img/codelines.png" alt="">
@@ -118,7 +164,21 @@
 					</p>
 				</section>
 				<section>
-					<ul>
+					<p>
+						Зачем рефакторить!?
+					</p>
+				<small class="fragment">
+				</small>
+				</section>
+				<section>
+					<p>Когда нельзя рефакторить</p>
+				</section>
+				<section>
+					<p>Необходимость рефакторинга куска кода как функция от частоты изменения</p>
+					<a href="https://goo.gl/56pRGe">https://goo.gl/56pRGe</a>
+				</section>
+				<section>
+					<ol>
 						<li>Изменение сигнатуры метода (Change Method Signature)</li>
 						<li>Инкапсуляция поля (Encapsulate Field)</li>
 						<li>Выделение класса (Extract Class)</li>
@@ -136,7 +196,7 @@
 						<li>Замена условного оператора полиморфизмом (Replace Conditional with Polymorphism)</li>
 						<li>Замена наследования делегированием (Replace Inheritance with Delegation)</li>
 						<li>Замена кода типа подклассами (Replace Type Code with Subclasses)</li>
-					</ul>
+					</ol>
 				</section>
 				<section data-transition="slide none">
 					<p>Все это не подходит для фронтенда</p>
@@ -146,9 +206,689 @@
 					<p>Все это не <s>очень</s> подходит для фронтенда</p>
 					<img src="img/1.jpg" alt="">
 				</section>
+				<section data-transition="none slide">
+					<p>Все это не <s>всегда</s> подходит для фронтенда</p>
+					<img src="img/1.jpg" alt="">
+				</section>
 				<section>
 					<p>В браузере много контекстов</p>
 				</section>
+				<section>
+					<h2>Контексты</h2>
+					<ol>
+						<li>HTML</li>
+						<li>CSS</li>
+						<li>JS</li>
+						<li class="fragment">Сборщик</li>
+						<li class="fragment">LESS</li>
+						<li class="fragment">TypeScript</li>
+					</ol>
+				</section>
+				<section>
+					<p>Делайте изменения маленькими</p>
+				</section>
+				<section>
+					<p>К рефакторингу хорошо бы подготовиться</p>
+					<ul>
+						<li class="fragment">Пофиксить все проблемы линтера</li>
+						<li class="fragment">Автоматически форматировать код</li>
+						<li class="fragment">Написать тесты</li>
+					</ul>
+				</section>
+				<section>
+					<p>Зачем линтер?!</p>
+					<p class="fragment">&mdash; код единообразней</p>
+				</section>
+				<section>
+					<p>Зачем тесты?</p>
+					<p class="fragment">Правильные тесты повышают надежность</p>
+				</section>
+				<section>
+					<img src="img/mock.png" alt="">
+				</section>
+				<section>
+					<p>
+						Код компонента
+					</p>
+					<pre><code style="font-size: 20px" data-trim>
+class FilterForm extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      value: '',
+      frameworks: ['react', 'angular', 'ember', 'backbone']
+    };
+
+    this.handleChange = this.handleChange.bind(this);
+  }
+
+  handleChange(event) {
+    this.setState({value: event.target.value});
+  }
+
+
+  render() {
+    const filteredElements = this.state.frameworks
+      .filter(e => e.includes(this.state.value))
+      .map(e => <li>{ e }</li>)
+
+    return (
+      <div>
+          <input type="text" value={this.state.value} onChange={this.handleChange} />
+          <ul>{ filteredElements }</ul>
+      </div>
+    );
+  }
+}	
+					</code></pre>
+				</section>
+				<section>
+					<p>
+						Код компонента
+					</p>
+					<pre><code style="font-size: 20px" data-trim>
+class FilterForm extends React.Component {
+  render() {
+    const filteredElements = this.state.frameworks
+      .filter(e => e.includes(this.state.value))
+      .map(e => <li>{ e }</li>)
+
+    return (
+      <div>
+          <input type="text" value={this.state.value} onChange={this.handleChange} />
+          <ul>{ filteredElements }</ul>
+      </div>
+    );
+  }
+}	
+					</code></pre>
+				</section>
+				<section data-transition="none slide">
+					<pre><code data-trim data-no-escape>
+test('should work', () =&gt; {
+	const wrapper = shallow(&lt;FilterForm /&gt;);
+	
+	expect(wrapper.find('li').length).to.equal(4);
+	
+	wrapper.find('input').simulate('change', {target: {value: 'react'}});
+	
+	expect(wrapper.find('li').length).to.equal(1);
+});	
+					</code></pre>
+				</section>
+
+				<section>
+					<pre><code data-trim>
+const filteredElements = this.state.frameworks
+      .filter(e => e.includes(this.state.value))
+      .map(e => <li>{ e }</li>)
+					</code></pre>
+				</section>
+				<section data-transition="slide none">
+					<pre><code data-trim data-noescape>
+const filteredElements = this.state.frameworks
+      <mark>.filter(e => e.includes(this.state.value))</mark>
+      .map(e => &lt;li&gt;{ e }&lt;/li&gt;)
+					</code></pre>
+				</section>
+				<section data-transition="none slide">
+					<pre><code data-trim data-no-escape>
+test('should work', () =&gt; {
+	const wrapper = shallow(&lt;FilterForm /&gt;);
+	
+	expect(wrapper.find('li').length).to.equal(4);
+	
+	wrapper.find('input').simulate('change', {target: {value: 'react'}});
+	
+	expect(wrapper.find('li').length).to.equal(1);
+});	
+					</code></pre>
+				</section>
+				<section data-transition="none">
+					<pre><code data-trim data-noescape>
+test('should work', () =&gt; {
+	const wrapper = shallow(&lt;FilterForm /&gt;);
+	
+	expect(wrapper.<mark>find('li')</mark>.length).to.equal(4);
+	
+	wrapper.<mark>find('input').simulate('change'</mark>, {target: {value: 'react'}});
+	
+	expect(wrapper.<mark>find('li').length</mark>).to.equal(1);
+});	
+					
+					</code></pre>
+				</section>
+				<section>
+					<p>
+					Правило туриста
+					</p>
+					<p class="fragment">&mdash; полянку нужно оставить чище, чем она была</p>
+					<p class="fragment">&mdash; иногда нужно внедрять принудительно</p>
+				</section>
+					<section>
+						Что насчет больших рефакторингов?
+					</section>
+					<section>
+						<p>Иногда помогает мыслить нестандартно</p>
+					</section>
+					<section data-transition="none">
+						<img src="img/new/1.png" alt="">
+					</section>
+					<section data-transition="none">
+						<img src="img/new/1_1.png" alt="">
+					</section>
+					<section data-transition="none">
+						<img src="img/new/1_2.png" alt="">
+					</section>
+					<section data-transition="none">
+						<img src="img/new/1_3.png" alt="">
+					</section>
+					<section data-transition="none">
+						<img src="img/new/1_4.png" alt="">
+					</section>
+					<section data-transition="none">
+						<img src="img/new/1_5.png" alt="">
+					</section>
+					<section data-transition="none">
+						<img src="img/new/2.png" alt="">
+					</section>
+					<section data-transition="none">
+						<img src="img/new/3.png" alt="">
+					</section>
+					<section data-transition="none">
+						<img src="img/new/2_1.png" alt="">
+					</section>
+					<section data-transition="none">
+						<img src="img/new/4.png" alt="">
+					</section>
+					<section data-transition="none">
+						<img src="img/new/4_1.png" alt="">
+					</section>
+					<section>
+						<img src="img/new/6_1.png" alt="">
+					</section>
+					<section data-background-image="img/new/7.png"></section>
+					<section data-background-image="img/new/7_2.png"></section>
+					<section data-transition="none">
+						<img src="img/new/8_2.png" alt="">
+					</section>
+					<section data-transition="none">
+						<img src="img/new/8_3.png" alt="">
+					</section>
+					<section data-transition="none">
+						<img src="img/new/8_4.png" alt="">
+					</section>
+					<section data-transition="none" data-background-image="img/new/9.png"></section>
+					<section data-transition="none" data-background-image="img/new/10.png"></section>
+					<section data-transition="none" data-background-image="img/new/50.png"></section>
+					<section>
+						<p>Недостатки</p>
+						<ul>
+							<li class="fragment">Глобальная область видимости</li>
+							<li class="fragment">Долгая сборка и пересборка</li>
+							<li class="fragment">Легаси в коде</li>
+						</ul>
+					</section>
+					<section data-transition="none">
+						<p>webpack</p>
+						<img src="img/new/11.png" style="max-height: 70vh" alt="">
+					</section>
+					<section data-transition="none">
+						<p>webpack</p>
+						<img src="img/new/12.png" style="max-height: 70vh" alt="">
+					</section>
+
+					<section>
+						<p>Используем консольку</p>
+						<pre style="width: 70%; margin: 0 auto"><code data-trim>
+							google_closure_compiler *.js | sed 's/\(.*\)/require("\1");/g' > index.js
+						</code></pre>
+						<br>
+					</section>
+					<section>
+            			<img src="img/shelltrick.png" alt="">
+					</section>
+					<section>
+						<pre style="width: 50%; margin: 0 auto"><code data-trim>
+							webpack index.js dist/output.js
+						</code></pre>
+					</section>
+					<section>
+						<p>А что же стало с глобальными именами?</p>
+					</section>
+					<section>
+						<p>
+						script-loader
+						</p>
+					</section>
+		          <section>
+		            <p>Ваш скрипт выполняется один раз в глобальном контексте</p>
+		          </section>
+		          <section>
+		            eval('Ваш скрипт');
+		          </section>
+					<section>
+						<p>
+						script-loader
+						<span class="fragment">💩</span>
+						</p>
+					</section>
+					<section>
+						<p>expose-loader</p>
+            <p class="fragment">Добавляет модуль в глобальный конектст</p>
+						<pre class="fragment"><code>require("expose-loader?$!jquery");</code></pre>
+					</section>
+										<section>
+						Пользуйтесь статическими анализаторами кода!
+					</section>
+          <section data-transition="none">
+            <pre><code style="font-size: 1.2em" class="javascript" data-trim data-noescape>
+...
+constructor: function(arguments) {
+  arguments.store = this._escapeValue(arguments.store);
+  $wspace.task.customfields.ComboBoxField.superclass
+    .constructor.call(this, arguments);
+},
+...
+</code></pre>
+          </section>
+          <section data-transition="none">
+            <pre><code style="font-size: 1.2em" class="javascript" data-trim data-noescape>
+...
+constructor: function(<mark>arguments</mark>) {
+  arguments.store = this._escapeValue(arguments.store);
+  $wspace.task.customfields.ComboBoxField.superclass
+    .constructor.call(this, arguments);
+},
+...
+</code></pre>
+          </section>
+                      <section>
+              <h2>
+                  Рефакторинг на основе AST
+              </h2>
+              <p class="fragment">(Абстрактное синтаксическое дерево)</p>
+          </section>
+          <section>
+            <p>В информатике конечное помеченное ориентированное дерево, в котором внутренние вершины сопоставлены (помечены) с операторами языка программирования, а листья — с соответствующими операндами.
+
+              Синтаксические деревья используются в парсерах для промежуточного представления</p>
+          </section>
+          <section>
+            <img src="img/ast.png" alt="">
+            <aside class="notes">
+            </aside>
+          </section>
+          <section>
+            <img src="img/ast2.png" alt="">
+          </section>
+          <section>
+            <img src="img/ast3.png" alt="">
+          </section>
+          <section>
+              <h2>grasp</h2>
+              <p>
+                  npm install -g grasp
+              </p>
+              <p>
+                  <a href="http://www.graspjs.com/">http://www.graspjs.com/</a>
+              </p>
+          </section>
+          <section>
+              <h3>
+              CSS подобный синтаксис
+              </h3>
+          </section>
+          <section data-transition="slide none">
+              <pre><code style="font-size: 1.2em" data-trim data-noescape>
+$ grasp 'if.test[op=&&]' a.js
+
+  2:   if (x && f(x)) { return x; }
+  4:   if (x != j) { return 'test'; }
+  5:   if (xs.length && ys.length) {
+  10:  if (x == 3 && list[x]) {
+              </code></pre>
+          </section>
+          <section data-transition="none">
+              <pre><code style="font-size: 1.2em" data-trim data-noescape>
+$ grasp '<mark>if</mark>.test[op=&&]' a.js
+
+  2:   if (x && f(x)) { return x; }
+  4:   if (x != j) { return 'test'; }
+  5:   if (xs.length && ys.length) {
+  10:  if (x == 3 && list[x]) {
+              </code></pre>
+          </section>
+          <section data-transition="none">
+              <pre><code style="font-size: 1.2em" data-trim data-noescape>
+$ grasp '<mark>if</mark>.test[op=&&]' a.js
+
+  2:   <mark>if</mark> (x && f(x)) { return x; }
+  4:   <mark>if</mark> (x != j) { return 'test'; }
+  5:   <mark>if</mark> (xs.length && ys.length) {
+  10:  <mark>if</mark> (x == 3 && list[x]) {
+              </code></pre>
+          </section>
+          <section data-transition="none">
+              <pre><code style="font-size: 1.2em" data-trim data-noescape>
+$ grasp 'if.<mark>test[op=&&]</mark>' a.js
+
+  2:   if (x && f(x)) { return x; }
+  4:   if (x != j) { return 'test'; }
+  5:   if (xs.length && ys.length) {
+  10:  if (x == 3 && list[x]) {
+              </code></pre>
+          </section>
+          <section data-transition="none">
+              <pre><code style="font-size: 1.2em" data-trim data-noescape>
+$ grasp 'if.<mark>test[op=&&]</mark>' a.js
+
+  2:   <mark class="green">if (x && f(x)) { return x; }</mark>
+  4:   if (x != j) { return 'test'; }
+  5:   if (xs.length && ys.length) {
+  10:  if (x == 3 && list[x]) {
+              </code></pre>
+          </section>
+          <section data-transition="none">
+              <pre><code style="font-size: 1.2em" data-trim data-noescape>
+$ grasp 'if.<mark>test[op=&&]</mark>' a.js
+
+  2:   <mark class="green">if (x && f(x)) { return x; }</mark>
+  4:   <mark class="red">if (x != j) { return 'test'; }</mark>
+  5:   if (xs.length && ys.length) {
+  10:  if (x == 3 && list[x]) {
+              </code></pre>
+          </section>
+          <section data-transition="none">
+              <pre><code style="font-size: 1.2em" data-trim data-noescape>
+$ grasp 'if.<mark>test[op=&&]</mark>' a.js
+
+  2:   <mark class="green">if (x && f(x)) { return x; }</mark>
+  4:   <mark class="red">if (x != j) { return 'test'; }</mark>
+  5:   <mark class="green">if (xs.length && ys.length) {</mark>
+  10:  <mark class="green">if (x == 3 && list[x]) {</mark>
+              </code></pre>
+          </section>
+          <section>
+              <h3>
+                  Поиск по шаблонам
+              </h3>
+          </section>
+          <section data-transition="none">
+              <pre><code style="font-size: 1.2em" data-trim data-noescape>
+$ grasp -e 'return __ + __' b.js
+
+  3:   if (x < 2) { return x + 2; }
+  13:  return '&gt;&gt;' + str.slice(2);
+  15:  return f(z) + x;
+              </code></pre>
+          </section>
+          <section data-transition="none">
+              <pre><code style="font-size: 1.2em" data-trim data-noescape>
+$ grasp -e '<mark>return __ + __'</mark> b.js
+
+  3:   if (x < 2) { return x + 2; }
+  13:  return '&gt;&gt;' + str.slice(2);
+  15:  return f(z) + x;
+              </code></pre>
+          </section>
+          <section data-transition="none">
+              <pre><code style="font-size: 1.2em" data-trim data-noescape>
+$ grasp -e '<mark>return __ + __'</mark> b.js
+
+  3:   if (x < 2) { <mark>return x + 2;</mark> }
+  13:  <mark>return '&gt;&gt;' + str.slice(2);</mark>
+  15:  <mark>return f(z) + x;</mark>
+              </code></pre>
+          </section>
+          <section>
+              <h2>Рефакторинг</h2>
+          </section>
+          <section data-transition="none">
+              <pre><code style="font-size: 150%" data-trim data-noescape>
+if (y < 2) {
+  window.x = y + z;
+}
+</code></pre>
+<pre class="fragment"><code style="font-size: 150%" data-trim data-noescape>
+$ grasp '[left=#y]' --replace 'f({{}})' f.js
+</code></pre>
+          </section>
+          <section data-transition="none">
+              <pre><code style="font-size: 150%" data-trim data-noescape>
+if (y < 2) {
+  window.x = y + z;
+}
+</code></pre>
+<pre><code style="font-size: 150%" data-trim data-noescape>
+$ grasp '<mark>[left=#y]'</mark> --replace 'f({{}})' f.js
+</code></pre>
+          </section>
+          <section data-transition="none">
+              <pre><code style="font-size: 150%" data-trim data-noescape>
+if (<mark class="green">y < 2</mark>) {
+  window.x = y + z;
+}
+</code></pre>
+<pre><code style="font-size: 150%" data-trim data-noescape>
+$ grasp '<mark>[left=#y]'</mark> --replace 'f({{}})' f.js
+</code></pre>
+          </section>
+          <section data-transition="none">
+              <pre><code style="font-size: 150%" data-trim data-noescape>
+if (<mark class="green">y < 2</mark>) {
+  <mark class="red">window.x = y + z;</mark>
+}
+</code></pre>
+<pre><code style="font-size: 150%" data-trim data-noescape>
+$ grasp '<mark>[left=#y]'</mark> --replace 'f({{}})' f.js
+</code></pre>
+          </section>
+          <section data-transition="none">
+              <pre><code style="font-size: 150%" data-trim data-noescape>
+if (<mark class="green">y < 2</mark>) {
+  <mark class="red">window.x = <mark class="green" style="background: #73BD00!important">y + z;</mark></mark>
+}
+</code></pre>
+<pre><code style="font-size: 150%" data-trim data-noescape>
+$ grasp '<mark>[left=#y]'</mark> --replace 'f({{}})' f.js
+</code></pre>
+          </section>
+          <section data-transition="none">
+              <pre><code style="font-size: 150%" data-trim data-noescape>
+if (<mark class="green">y < 2</mark>) {
+  <mark class="red">window.x = <mark class="green" style="background: #73BD00!important">y + z;</mark></mark>
+}
+</code></pre>
+<pre><code style="font-size: 150%" data-trim data-noescape>
+$ grasp '<mark>[left=#y]'</mark> --replace '<mark>f({{}})</mark>' f.js
+</code></pre>
+          </section>
+          <section data-transition="none">
+<pre><code style="font-size: 150%" data-trim data-noescape>
+$ grasp '<mark>[left=#y]'</mark> --replace '<mark>f({{}})</mark>' f.js
+</code></pre>
+            <pre><code>if (f(y < 2)) {
+  window.x = f(y + z);
+}</code></pre>
+          </section>
+          <section data-transition="none">
+<pre><code style="font-size: 150%" data-trim data-noescape>
+$ grasp '<mark>[left=#y]'</mark> --replace '<mark>f({{}})</mark>' f.js
+</code></pre>
+            <pre><code data-noescape>if (<mark>f(y < 2)</mark>) {
+  window.x = <mark>f(y + z)</mark>;
+}</code></pre>
+          </section>
+          <section>
+              <h2>jscodeshift</h2>
+              <p>
+                  jscodeshift is a toolkit for running codemods over multiple JS files.
+              </p>
+              <a href="https://github.com/facebook/jscodeshift">https://github.com/facebook/jscodeshift</a>
+          </section>
+          <section>
+              <h2>Codemods</h2>
+              <pre class="fragment"><code style="font-size: 1.4em" data-trim data-noescape>
+module.exports = function(fileInfo, api) {
+  return api.jscodeshift(fileInfo.source)
+    .findVariableDeclarators('foo')
+    .renameTo('bar')
+    .toSource();
+}
+              </code></pre>
+          </section>
+          <section data-transition="none">
+              <h2>Codemods</h2>
+              <pre><code style="font-size: 1.4em" data-trim data-noescape>
+module.exports = function(<mark>fileInfo</mark>, api) {
+  return api.jscodeshift(fileInfo.source)
+    .findVariableDeclarators('foo')
+    .renameTo('bar')
+    .toSource();
+}
+              </code></pre>
+          </section>
+          <section data-transition="none">
+              <h2>Codemods</h2>
+              <pre><code style="font-size: 1.4em" data-trim data-noescape>
+module.exports = function(<mark>fileInfo</mark>, api) {
+  return api.jscodeshift(fileInfo.source)
+    .findVariableDeclarators('foo')
+    .renameTo('bar')
+    <mark>.toSource()</mark>;
+              </code></pre>
+          </section>
+          <section data-transition="none">
+              <h2>Codemods</h2>
+              <pre><code style="font-size: 1.4em" data-trim data-noescape>
+module.exports = function(fileInfo, api) {
+  return api.jscodeshift(fileInfo.source)
+    <mark>.findVariableDeclarators('foo')</mark>
+    <mark>.renameTo('bar')</mark>
+    .toSource();
+              </code></pre>
+          </section>
+          <section>
+              <h2>Готовый сборник рецептов</h2>
+              <p>
+              <a href="https://github.com/cpojer/js-codemod">https://github.com/cpojer/js-codemod</a>
+              </p>
+              <ul class="fragment">
+                  <li>var в const или let.</li>
+                  <li>Обратные вызовы в cтрелочные функции</li>
+                  <li>Строки в шаблоны</li>
+              </ul>
+          </section>
+                    <section>
+              Стили тоже можно рефакторить в AST режиме
+          </section>
+          <section>
+            <div class="styles-1" style="vertical-align: middle;">
+              <ul>
+              	<li>Stylus</li>
+              	<li>LESS</li>
+              	<li>CSS</li>
+              </ul>
+            <div style="font-size: 100px; vertical-align: middle;">→</div>
+            <div style="vertical-align: middle;">
+            &nbsp;LESS
+            </div>
+            </div>
+          </section>
+          <section data-transition="slide none">
+            <p>Stylus → CSS + комменатрии
+          </section>
+          <section data-transition="none">
+            <pre><code class="css" data-trim>
+ ...
+color: blue
+}
+/* $$$ file1.stylus */
+.my-awesome-class {
+	color: red;
+....
+            </code></pre>
+          </section>
+          <section data-transition="none">
+<pre><code class="css" data-trim data-noescape>
+ ...
+color: blue
+}
+/* $$$ <mark>file1.stylus</mark> */
+.my-awesome-class {
+	color: red;
+....
+            </code></pre>
+          </section>
+          <section data-transition="slide none" style="text-align: left">
+            <p>Stylus → CSS</p>
+          </section>
+          <section data-transition="none" style="text-align: left">
+            <p>Stylus → CSS → PostCSS
+          </section>
+          <section>
+              <p>POSTCSS + plugins</p>
+              <ul>
+                  <li class="fragment">Убрать дублирование стилей</li>
+                  <li class="fragment">Уменьшить разброс цветов</li>
+                  <li class="fragment">Убрать префиксы</li>
+                  <li class="fragment">Выделить новые переменные</li>
+              </ul>
+              <p class="fragment">
+                POSTCSS в сборку
+              </p>
+          </section>
+          <section data-transition="none" style="text-align: left">
+            <p>Stylus → CSS → PostCSS
+          </section>
+          <section data-transition="none" style="text-align: left">
+            <p>Stylus → CSS → PostCSS → CSS 🔥
+          </section>
+          <section data-transition="none" style="text-align: left">
+            <p>Stylus → CSS → PostCSS → CSS 🔥 → Less
+          </section>
+          <section data-transition="none" style="text-align: left">
+            <p>Stylus → CSS → PostCSS → CSS 🔥 → Less 😇
+          </section>
+          <section  data-background-video="img/panic.mp4"></section>
+                    <section>
+              <h2>Мердж изменений &mdash; очень больно</h2>
+          </section>
+          <section>
+              <h2>Gulp</h2>
+              <pre class="fragment"><code data-trim data-noescape>
+gulp.task('refactor', function () {
+  return gulp.src('folder/**/*.js')
+    .pipe(RefactoringPlugin())
+    .pipe(gulp.dest('./'))
+})
+              </code></pre>
+          </section>
+          <section>
+              <p>
+                  Если что-то пошло не так, то
+              <pre class="fragment"><code data-trim data-noescape>
+$ git reset --hard
+$ git merge origin/master
+$ gulp refactor
+              </code></pre>
+              </p>
+          </section>
+          <section>
+            <h3>
+              Спасибо!
+            </h3>
+            <p>
+              <img src="img/twitter.svg" style="height: 2em; margin: 0; vertical-align: middle" alt="">
+              <a href="https://twitter.com/zolotyh">@zolotyh</a>
+            </p>
+            <p>email: aazolotyh@gmail.com</p>
+            <p>
+            	<a href="https://zolotyh.github.io/refactoring2/">https://zolotyh.github.io/refactoring2/</a>
+            </p>
+          </section>
+
 			</div>
     </div>
     <script src="lib/js/head.min.js"></script>
